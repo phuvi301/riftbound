@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/components/damageable.gd" id="2_dmg"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon_controller.gd" id="3_wc"]
+[ext_resource type="Resource" path="res://resources/weapons/pistol.tres" id="4_pistol"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/nova_base.png" id="5_nova"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/pistol.png" id="6_pistol_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nova"]
+radius = 10.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_nova")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("5_nova")
+
+[node name="WeaponPivot" type="Node2D" parent="."]
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponPivot"]
+position = Vector2(12, 1)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("6_pistol_tex")
+
+[node name="MuzzlePoint" type="Marker2D" parent="WeaponPivot"]
+position = Vector2(22, 0)
+
+[node name="WeaponController" type="Node2D" parent="WeaponPivot" node_paths=PackedStringArray("muzzle_point", "weapon_sprite")]
+script = ExtResource("3_wc")
+weapon_data = ExtResource("4_pistol")
+muzzle_point = NodePath("../MuzzlePoint")
+weapon_sprite = NodePath("../WeaponSprite")
+
+[node name="Damageable" type="Node" parent="."]
+script = ExtResource("2_dmg")
+max_hp = 100.0
+armor = 5.0
+team = &"player"
+invulnerable_duration = 0.25
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
