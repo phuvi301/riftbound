@@ -4,11 +4,14 @@
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/test/target_dummy.tscn" id="3_dummy"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_minimal.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/brute_golem/brute_golem.tscn" id="5_brute"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/melee_drone/melee_drone.tscn" id="5_melee"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ranger_drone/ranger_drone.tscn" id="5_ranger"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/brute_golem/brute_golem.tscn" id="5_brute"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/elite/elite_melee_drone.tscn" id="5_elite"]
-[ext_resource type="Script" path="res://scripts/test/arena_nav_bake.gd" id="6_navbake"]
+[ext_resource type="Script" uid="uid://c4afvkows400d" path="res://scripts/test/arena_nav_bake.gd" id="6_navbake"]
+[ext_resource type="Script" uid="uid://s4wsfbo8v05a" path="res://scripts/test/encounter_debug.gd" id="e_dbg"]
+[ext_resource type="Script" uid="uid://bl884ivs5lkgi" path="res://scripts/encounter/encounter.gd" id="e_enc"]
+[ext_resource type="Script" uid="uid://c3mkmrbnq8xsx" path="res://scripts/encounter/wave_entry.gd" id="e_entry"]
+[ext_resource type="Script" uid="uid://c48knc08qlj3o" path="res://scripts/encounter/wave_data.gd" id="e_wave"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
 size = Vector2(640, 20)
@@ -18,6 +21,42 @@ size = Vector2(20, 400)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pillar"]
 size = Vector2(40, 40)
+
+[sub_resource type="Resource" id="WE_melee3"]
+script = ExtResource("e_entry")
+scene = ExtResource("5_melee")
+count = 3
+
+[sub_resource type="Resource" id="WD1"]
+script = ExtResource("e_wave")
+entries = Array[ExtResource("e_entry")]([SubResource("WE_melee3")])
+
+[sub_resource type="Resource" id="WE_ranger2"]
+script = ExtResource("e_entry")
+scene = ExtResource("5_ranger")
+count = 2
+
+[sub_resource type="Resource" id="WE_melee2"]
+script = ExtResource("e_entry")
+scene = ExtResource("5_melee")
+count = 2
+
+[sub_resource type="Resource" id="WD2"]
+script = ExtResource("e_wave")
+entries = Array[ExtResource("e_entry")]([SubResource("WE_ranger2"), SubResource("WE_melee2")])
+
+[sub_resource type="Resource" id="WE_brute1"]
+script = ExtResource("e_entry")
+scene = ExtResource("5_brute")
+
+[sub_resource type="Resource" id="WE_elite1"]
+script = ExtResource("e_entry")
+scene = ExtResource("5_melee")
+elite = true
+
+[sub_resource type="Resource" id="WD3"]
+script = ExtResource("e_wave")
+entries = Array[ExtResource("e_entry")]([SubResource("WE_brute1"), SubResource("WE_elite1")])
 
 [node name="TestArenaA" type="Node2D" unique_id=1358108506]
 script = ExtResource("1_arena")
@@ -107,41 +146,39 @@ position = Vector2(210, 0)
 [node name="TargetDummy3" parent="." unique_id=1324372983 instance=ExtResource("3_dummy")]
 position = Vector2(180, 80)
 
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1627301845]
 script = ExtResource("6_navbake")
 
-[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=2123124345]
 
-[node name="Spawn1" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=1645838950]
 position = Vector2(250, -130)
 
-[node name="Spawn2" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=398216939]
 position = Vector2(250, 130)
 
-[node name="Spawn3" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=1423997610]
 position = Vector2(0, -140)
 
-[node name="Spawn4" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=1722039402]
 position = Vector2(0, 140)
 
-[node name="Spawn5" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn5" type="Marker2D" parent="SpawnPoints" unique_id=1026555695]
 position = Vector2(-250, -130)
 
-[node name="Spawn6" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn6" type="Marker2D" parent="SpawnPoints" unique_id=2107022910]
 position = Vector2(-250, 130)
 
-[node name="Enemies" type="Node2D" parent="."]
-
-[node name="MeleeDrone" parent="Enemies" instance=ExtResource("5_melee")]
-position = Vector2(-200, 120)
-
-[node name="RangerDrone" parent="Enemies" instance=ExtResource("5_ranger")]
-position = Vector2(200, 120)
-
-[node name="BruteGolem" parent="Enemies" instance=ExtResource("5_brute")]
-position = Vector2(0, 120)
-
-[node name="EliteMeleeDrone" parent="Enemies" instance=ExtResource("5_elite")]
-position = Vector2(0, -130)
+[node name="Enemies" type="Node2D" parent="." unique_id=1558900080]
 
 [node name="HUDMinimal" parent="." unique_id=1527064317 instance=ExtResource("4_hud")]
+
+[node name="Encounter" type="Node" parent="." unique_id=444974361]
+script = ExtResource("e_enc")
+waves = Array[ExtResource("e_wave")]([SubResource("WD1"), SubResource("WD2"), SubResource("WD3")])
+spawn_points = NodePath("../SpawnPoints")
+spawn_parent = NodePath("../Enemies")
+
+[node name="EncounterDebug" type="Node" parent="." unique_id=1871394434]
+script = ExtResource("e_dbg")
+encounter = NodePath("../Encounter")

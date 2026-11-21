@@ -1,7 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://caeuyq1m4viq8"]
 
 [ext_resource type="PackedScene" path="res://scenes/enemies/brute_golem/brute_golem.tscn" id="1_base"]
 
 [node name="EliteBruteGolem" unique_id=1113001 instance=ExtResource("1_base")]
+telegraph_time = 0.7
+dash_time = 0.35
+dash_speed = 430.0
+hit_knockback = 260.0
+telegraph_width = 36.0
 is_elite = true
-
