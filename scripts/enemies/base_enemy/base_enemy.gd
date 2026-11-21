@@ -32,9 +32,24 @@ const KNOCKBACK_DECAY := 8.0
 @export var require_line_of_sight: bool = true
 @export var path_update_interval: float = 0.25
 
+@export_group("Combat")
+## Sát thương mỗi đòn (chưa nhân hệ số Elite). Dùng qua get_attack_damage().
+@export var attack_damage: float = 10.0
+
+@export_group("Elite")
+## Elite không phải lớp mới: chỉ là cờ nhân chỉ số + đổi màu.
+@export var is_elite: bool = false
+@export var elite_health_mult: float = 2.5
+@export var elite_damage_mult: float = 1.5
+@export var elite_speed_mult: float = 1.15
+@export var elite_tint: Color = Color(1.0, 0.72, 0.35)
+@export var elite_scale: float = 1.15
+
 var state: State = State.IDLE
 var target: Node2D = null
 var damageable: Damageable
+## AnimatedSprite2D tên "Visual" (nếu scene có). Cần các animation: idle, move, attack, death.
+var visual: AnimatedSprite2D
 
 var _state_time: float = 0.0
 var _cooldown_left: float = 0.0
@@ -57,6 +72,15 @@ static func next_hit_id() -> int:
 
 func _ready() -> void:
 	add_to_group("enemies")
+	if is_elite:
+		_apply_elite()
+	visual = get_node_or_null("Visual") as AnimatedSprite2D
+	if visual:
+		# Có sprite thật thì ẩn placeholder.
+		var placeholder := get_node_or_null("Sprite2D") as CanvasItem
+		if placeholder:
+			placeholder.visible = false
+		_play_anim(&"idle")
 	damageable = get_node_or_null("Damageable") as Damageable
 	if damageable == null:
 		damageable = Damageable.new()
@@ -96,6 +120,55 @@ func _physics_process(delta: float) -> void:
 
 	velocity += _knockback
 	move_and_slide()
+	_update_visual()
+
+
+# ---------------------------------------------------------------- Elite / chỉ số
+
+func _apply_elite() -> void:
+	max_health *= elite_health_mult
+	attack_damage *= elite_damage_mult
+	move_speed *= elite_speed_mult
+	scale *= elite_scale
+	modulate = elite_tint
+
+
+## Sát thương một đòn của enemy này (đã gồm hệ số Elite).
+func get_attack_damage() -> float:
+	return attack_damage
+
+
+## Tạo hit_info đúng contract của A cho một đòn của enemy.
+func make_hit_info(amount: float, knockback: Vector2 = Vector2.ZERO, hit_id: int = 0) -> Dictionary:
+	return {
+		"amount": amount,
+		"team": &"enemy",
+		"is_crit": false,
+		"hit_id": hit_id if hit_id != 0 else next_hit_id(),
+		"knockback": knockback,
+	}
+
+
+# ---------------------------------------------------------------- Hình ảnh
+
+func _play_anim(anim: StringName, from_start: bool = false) -> void:
+	if visual == null or not visual.sprite_frames or not visual.sprite_frames.has_animation(anim):
+		return
+	if visual.animation != anim or from_start or not visual.is_playing():
+		visual.play(anim)
+
+
+## Chọn animation theo trạng thái và quay mặt theo hướng mục tiêu / hướng đi.
+func _update_visual() -> void:
+	if visual == null:
+		return
+	var face_x := velocity.x
+	if target != null and is_instance_valid(target):
+		face_x = target.global_position.x - global_position.x
+	if absf(face_x) > 1.0:
+		visual.flip_h = face_x < 0.0
+	if state == State.CHASE:
+		_play_anim(&"move" if velocity.length() > 5.0 else &"idle")
 
 
 # ---------------------------------------------------------------- Trạng thái
@@ -108,6 +181,11 @@ func change_state(new_state: State) -> void:
 	_state_time = 0.0
 	_path_timer = 0.0
 	_update_label()
+	match new_state:
+		State.IDLE, State.RECOVER, State.STUNNED:
+			_play_anim(&"idle")
+		State.ATTACK:
+			_play_anim(&"attack", true)
 	state_changed.emit(old, new_state)
 	_on_state_entered(new_state, old)
 
@@ -249,8 +327,16 @@ func die() -> void:
 		return
 	change_state(State.DEAD)
 	set_physics_process(false)
+	set_deferred("collision_layer", 0)
+	var label := get_node_or_null("HpLabel") as CanvasItem
+	if label:
+		label.visible = false
 	died.emit(self)
-	queue_free()
+	if visual and visual.sprite_frames and visual.sprite_frames.has_animation(&"death"):
+		visual.play(&"death")
+		await visual.animation_finished
+	if is_inside_tree():
+		queue_free()
 
 
 # ---------------------------------------------------------------- Debug

@@ -1,3 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Agent instructions (local only)
+CLAUDE.md
+AGENTS.md

@@ -1,0 +1,176 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/base_enemy/base_enemy.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/enemies/base_enemy/melee_drone.gd" id="2_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/melee_drone/melee_drone_sheet.png" id="3_sheet"]
+
+[sub_resource type="AtlasTexture" id="melee_idle_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_idle_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_idle_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_idle_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_move_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_move_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_move_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_move_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_attack_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_attack_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_attack_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_attack_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_death_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_death_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_death_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="melee_death_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_melee"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("melee_idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_idle_3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("melee_move_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_move_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_move_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_move_3")
+}],
+"loop": true,
+"name": &"move",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("melee_attack_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_attack_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_attack_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_attack_3")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("melee_death_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_death_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_death_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("melee_death_3")
+}],
+"loop": false,
+"name": &"death",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 12
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 16
+
+[node name="MeleeDrone" unique_id=1101001 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+max_health = 40.0
+armor = 0.0
+move_speed = 115.0
+detect_range = 260.0
+lose_range = 380.0
+attack_range = 34.0
+attack_cooldown = 0.9
+recover_time = 0.35
+attack_damage = 10.0
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_melee")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+shape = SubResource("CircleShape2D_hit")
+

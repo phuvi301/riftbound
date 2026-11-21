@@ -4,7 +4,10 @@
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/test/target_dummy.tscn" id="3_dummy"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_minimal.tscn" id="4_hud"]
-[ext_resource type="PackedScene" uid="uid://ca3d40gw6ndcn" path="res://scenes/enemies/base_enemy/base_enemy.tscn" id="5_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/melee_drone/melee_drone.tscn" id="5_melee"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ranger_drone/ranger_drone.tscn" id="5_ranger"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/brute_golem/brute_golem.tscn" id="5_brute"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/elite/elite_melee_drone.tscn" id="5_elite"]
 [ext_resource type="Script" path="res://scripts/test/arena_nav_bake.gd" id="6_navbake"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
@@ -129,7 +132,16 @@ position = Vector2(-250, 130)
 
 [node name="Enemies" type="Node2D" parent="."]
 
-[node name="BaseEnemy" parent="Enemies" instance=ExtResource("5_enemy")]
+[node name="MeleeDrone" parent="Enemies" instance=ExtResource("5_melee")]
+position = Vector2(-200, 120)
+
+[node name="RangerDrone" parent="Enemies" instance=ExtResource("5_ranger")]
+position = Vector2(200, 120)
+
+[node name="BruteGolem" parent="Enemies" instance=ExtResource("5_brute")]
 position = Vector2(0, 120)
+
+[node name="EliteMeleeDrone" parent="Enemies" instance=ExtResource("5_elite")]
+position = Vector2(0, -130)
 
 [node name="HUDMinimal" parent="." unique_id=1527064317 instance=ExtResource("4_hud")]
