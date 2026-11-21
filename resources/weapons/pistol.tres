@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/pistol.png" id="2_pistol_tex"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"pistol"
+display_name = "Pistol"
+damage = 12.0
+fire_rate = 3.0
+magazine_size = 12
+reload_time = 1.0
+projectile_speed = 700.0
+spread_deg = 2.0
+pellets = 1
+burst_count = 1
+burst_interval = 0.08
+energy_cost = 0.0
+automatic = false
+sprite_texture = ExtResource("2_pistol_tex")

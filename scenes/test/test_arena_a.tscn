@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://blrbckgesuws6"]
+
+[ext_resource type="Script" uid="uid://civm5h1j52d8g" path="res://scripts/test/test_arena_a.gd" id="1_arena"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/test/target_dummy.tscn" id="3_dummy"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud_minimal.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/melee_drone/melee_drone.tscn" id="5_melee"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ranger_drone/ranger_drone.tscn" id="5_ranger"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/brute_golem/brute_golem.tscn" id="5_brute"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/elite/elite_melee_drone.tscn" id="5_elite"]
+[ext_resource type="Script" path="res://scripts/test/arena_nav_bake.gd" id="6_navbake"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(640, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(20, 400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pillar"]
+size = Vector2(40, 40)
+
+[node name="TestArenaA" type="Node2D" unique_id=1358108506]
+script = ExtResource("1_arena")
+
+[node name="Floor" type="Polygon2D" parent="." unique_id=1766531154]
+z_index = -10
+color = Color(0.08, 0.11, 0.16, 1)
+polygon = PackedVector2Array(-320, -200, 320, -200, 320, 200, -320, 200)
+
+[node name="Walls" type="Node2D" parent="." unique_id=129470347]
+
+[node name="WallTop" type="StaticBody2D" parent="Walls" unique_id=1421793220]
+position = Vector2(0, -190)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallTop" unique_id=25381654]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Visual" type="Polygon2D" parent="Walls/WallTop" unique_id=1697822505]
+color = Color(0.2, 0.26, 0.35, 1)
+polygon = PackedVector2Array(-320, -10, 320, -10, 320, 10, -320, 10)
+
+[node name="WallBottom" type="StaticBody2D" parent="Walls" unique_id=126820322]
+position = Vector2(0, 190)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallBottom" unique_id=1857982834]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Visual" type="Polygon2D" parent="Walls/WallBottom" unique_id=985587488]
+color = Color(0.2, 0.26, 0.35, 1)
+polygon = PackedVector2Array(-320, -10, 320, -10, 320, 10, -320, 10)
+
+[node name="WallLeft" type="StaticBody2D" parent="Walls" unique_id=802089236]
+position = Vector2(-310, 0)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallLeft" unique_id=1069887079]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="Visual" type="Polygon2D" parent="Walls/WallLeft" unique_id=941862818]
+color = Color(0.2, 0.26, 0.35, 1)
+polygon = PackedVector2Array(-10, -200, 10, -200, 10, 200, -10, 200)
+
+[node name="WallRight" type="StaticBody2D" parent="Walls" unique_id=274540237]
+position = Vector2(310, 0)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallRight" unique_id=2103116292]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="Visual" type="Polygon2D" parent="Walls/WallRight" unique_id=1956121253]
+color = Color(0.2, 0.26, 0.35, 1)
+polygon = PackedVector2Array(-10, -200, 10, -200, 10, 200, -10, 200)
+
+[node name="Pillar1" type="StaticBody2D" parent="Walls" unique_id=384296935 groups=["nav_obstacles"]]
+position = Vector2(-90, -50)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Pillar1" unique_id=2020027663]
+shape = SubResource("RectangleShape2D_pillar")
+
+[node name="Visual" type="Polygon2D" parent="Walls/Pillar1" unique_id=1195527011]
+color = Color(0.25, 0.32, 0.42, 1)
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+
+[node name="Pillar2" type="StaticBody2D" parent="Walls" unique_id=1461376558 groups=["nav_obstacles"]]
+position = Vector2(90, 50)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Pillar2" unique_id=512105959]
+shape = SubResource("RectangleShape2D_pillar")
+
+[node name="Visual" type="Polygon2D" parent="Walls/Pillar2" unique_id=1483709457]
+color = Color(0.25, 0.32, 0.42, 1)
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+
+[node name="Player" parent="." unique_id=109600047 instance=ExtResource("2_player")]
+position = Vector2(-180, 0)
+
+[node name="TargetDummy1" parent="." unique_id=1406996369 instance=ExtResource("3_dummy")]
+position = Vector2(180, -80)
+
+[node name="TargetDummy2" parent="." unique_id=791764933 instance=ExtResource("3_dummy")]
+position = Vector2(210, 0)
+
+[node name="TargetDummy3" parent="." unique_id=1324372983 instance=ExtResource("3_dummy")]
+position = Vector2(180, 80)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+script = ExtResource("6_navbake")
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(250, -130)
+
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(250, 130)
+
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(0, -140)
+
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(0, 140)
+
+[node name="Spawn5" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(-250, -130)
+
+[node name="Spawn6" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(-250, 130)
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="MeleeDrone" parent="Enemies" instance=ExtResource("5_melee")]
+position = Vector2(-200, 120)
+
+[node name="RangerDrone" parent="Enemies" instance=ExtResource("5_ranger")]
+position = Vector2(200, 120)
+
+[node name="BruteGolem" parent="Enemies" instance=ExtResource("5_brute")]
+position = Vector2(0, 120)
+
+[node name="EliteMeleeDrone" parent="Enemies" instance=ExtResource("5_elite")]
+position = Vector2(0, -130)
+
+[node name="HUDMinimal" parent="." unique_id=1527064317 instance=ExtResource("4_hud")]

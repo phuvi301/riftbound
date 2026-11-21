@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/melee_drone/melee_drone.tscn" id="1_base"]
+
+[node name="EliteMeleeDrone" unique_id=1111001 instance=ExtResource("1_base")]
+is_elite = true
+

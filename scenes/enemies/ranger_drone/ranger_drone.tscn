@@ -1,0 +1,163 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/base_enemy/base_enemy.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/enemies/base_enemy/ranger_drone.gd" id="2_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/ranger_drone/ranger_drone_sheet.png" id="3_sheet"]
+
+[sub_resource type="AtlasTexture" id="ranger_idle_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_idle_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_idle_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_idle_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_move_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_move_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_move_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_move_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_attack_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_attack_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_attack_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_attack_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_death_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_death_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_death_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="ranger_death_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ranger"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("ranger_idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_idle_3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("ranger_move_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_move_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_move_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_move_3")
+}],
+"loop": true,
+"name": &"move",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("ranger_attack_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_attack_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_attack_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_attack_3")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("ranger_death_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_death_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_death_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("ranger_death_3")
+}],
+"loop": false,
+"name": &"death",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 11
+
+[node name="RangerDrone" unique_id=1102001 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+max_health = 30.0
+armor = 0.0
+move_speed = 85.0
+detect_range = 320.0
+lose_range = 460.0
+attack_cooldown = 1.4
+recover_time = 0.5
+attack_damage = 8.0
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ranger")
+animation = &"idle"
+autoplay = "idle"
+
